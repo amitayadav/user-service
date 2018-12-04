@@ -1,8 +1,8 @@
+extern crate actix_web;
 #[macro_use]
 extern crate cdrs;
 #[macro_use]
 extern crate cdrs_helpers_derive;
-extern crate actix_web;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
@@ -19,3 +19,8 @@ pub mod set_up_databse {
     pub mod keyspace;
     pub mod table;
 }
+
+/*pub mod event {
+    pub mod event_models;
+    pub mod traits;
+}*/

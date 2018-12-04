@@ -17,16 +17,16 @@ fn main() {
     let mut server = server::new(|| {
         App::new()
             .resource("/add/user", |r| r.method(http::Method::POST)
-                .with(create_user))
-            .resource("/show/user/{id}", |r| r.method(http::Method::GET)
+                .with(create_user1))
+           /* .resource("/show/user/{id}", |r| r.method(http::Method::GET)
                 .with(get_user))
             .resource("/show/users", |r| r.method(http::Method::GET)
-                .with(get_users))
+                .with(get_users))*/
     });
     server = if let Some(l) = listenfd.take_tcp_listener(0).unwrap() {
         server.listen(l)
     } else {
-        server.bind("127.0.0.1:8880").unwrap()
+        server.bind("127.0.0.1:3500").unwrap()
     };
 
     server.run();

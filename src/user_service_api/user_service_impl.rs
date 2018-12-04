@@ -3,23 +3,34 @@ use user_service_api::models::*;
 use actix_web::{Json,Path};
 use cdrs::types::prelude::*;
 use cdrs::query::QueryExecutor;
+//use uuid::*;
 
-pub fn insert_struct(session: &CurrentSession, new_user: Json<CreatedUser>) -> Json<User> {
+pub fn insert_struct(session: &CurrentSession, new_user: Json<CreateUser>)  {
 
-    let user = User {
-        id: "101".to_string(),
+   let userId = 101;
+
+    let user_data = User {
+        id: userId.to_owned(),
         name: new_user.name.to_string()
     };
-    let insert_struct_cql = "INSERT INTO user_ks.user \
-                           (id,name) VALUES (?,?) ";
-    session
-        .query_with_values(insert_struct_cql, query_values!(user.id,user.name))
-        .expect("insert here ");
+    let event = match UserAggregate::create_user(userId,user_data.name)
+        {
+        vec![UserEvent::UserCreated,..] => vec![UserEvent::UserCreated(user_data),..]
+            .iter().map(|x|x).collect(),
+        _ => "not created".to_string(),
+    };
 
-    Json(user)
+    let insert_struct_cql = "INSERT INTO user_ks.user_event \
+                           (id,variant) VALUES (?,?) ";
+    session
+        .query_with_values(insert_struct_cql, query_values!(userId,event))
+        .expect("insert here ");
+        //Json(user_data)
+
 }
 
-pub fn select_one_struct(session: &CurrentSession, path: Path<String>) -> User{
+/*
+pub fn select_one_struct(session: &CurrentSession, path: Path<i32>) -> User{
     let select_struct_cql = "SELECT * FROM user_ks.user where id = ?";
     let id = path.into_inner();
 
@@ -31,7 +42,7 @@ pub fn select_one_struct(session: &CurrentSession, path: Path<String>) -> User{
         .expect("into rows");
 
     let mut my_row = User {
-        id: String::new(),
+        id: 0,
         name: String::new(),
     };
 
@@ -55,6 +66,7 @@ pub fn select_struct(session: &CurrentSession) -> Vec<User>{
     let mut v: Vec<User> = Vec::new();
     for row in rows {
          v.push(User::try_from_row(row).expect("into User"))
+       // v = User::try_from_row(row).expect("into User");
     }
     v
-}
+}*/
