@@ -7,7 +7,6 @@ extern crate serde;
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
-extern crate uuid;
 
 pub mod user_service_api {
     pub mod models;
@@ -19,8 +18,3 @@ pub mod set_up_databse {
     pub mod keyspace;
     pub mod table;
 }
-
-/*pub mod event {
-    pub mod event_models;
-    pub mod traits;
-}*/

@@ -1,10 +1,9 @@
 extern crate actix_web;
 extern crate cdrs;
-#[macro_use]
 extern crate cdrs_helpers_derive;
 extern crate listenfd;
 extern crate user_service;
-extern crate uuid;
+//extern crate uuid;
 
 use actix_web::{App, http, server};
 use index::*;
@@ -18,7 +17,7 @@ fn main() {
         App::new()
             .resource("/add/user", |r| r.method(http::Method::POST)
                 .with(create_user1))
-           /* .resource("/show/user/{id}", |r| r.method(http::Method::GET)
+            /*.resource("/show/user/{id}", |r| r.method(http::Method::GET)
                 .with(get_user))
             .resource("/show/users", |r| r.method(http::Method::GET)
                 .with(get_users))*/
